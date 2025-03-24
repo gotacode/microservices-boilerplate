@@ -1,0 +1,18 @@
+import { Router } from 'express';
+import { {{camelCase name}}Controller } from '../controllers/{{camelCase name}}.controller.js';
+
+const router = Router();
+
+/**
+ * @swagger
+ * /api/{{dashCase name}}:
+ *   get:
+ *     summary: Exemplo de rota gerada com Plop
+ *     tags: [{{properCase name}}]
+ *     responses:
+ *       200:
+ *         description: Sucesso
+ */
+router.get('/', {{camelCase name}}Controller);
+
+export default router;

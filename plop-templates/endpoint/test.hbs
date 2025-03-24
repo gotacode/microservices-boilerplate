@@ -1,0 +1,13 @@
+import { {{camelCase name}}Controller } from '../../../src/api/controllers/{{camelCase name}}.controller.js';
+
+describe('{{camelCase name}}Controller', () => {
+  it('should return 200 and success message', () => {
+    const req = {};
+    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+    {{camelCase name}}Controller(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({ message: '{{camelCase name}} works!' });
+  });
+});

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{dashCase name}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{dashCase name}}
+  template:
+    metadata:
+      labels:
+        app: {{dashCase name}}
+    spec:
+      containers:
+      - name: {{dashCase name}}
+        image: {{repositoryName}}/{{dashCase name}}:latest
+        ports:
+        - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 15

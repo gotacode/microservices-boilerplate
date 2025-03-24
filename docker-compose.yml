@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    stdin_open: true
+    tty: true
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - LOG_LEVEL=info
+      - DD_SERVICE={{dashCase name}}
+      - DD_ENV=development
+    volumes:
+      - .:/app
+    depends_on:
+      - dynamodb
+      - consul
+
+  dynamodb:
+    image: amazon/dynamodb-local
+    ports:
+      - "8000:8000"
+    command: -jar DynamoDBLocal.jar -inMemory -sharedDb
+
+  consul:
+    image: consul
+    ports:
+      - "8500:8500"
