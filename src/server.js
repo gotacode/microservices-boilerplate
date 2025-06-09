@@ -12,30 +12,27 @@ import cors from 'cors';
 import compression from 'compression';
 import pinoHttp from 'pino-http';
 import rateLimit from 'express-rate-limit';
+import { traceIdMiddleware } from './middlewares/traceId.js';
+import { metricsMiddleware } from './middlewares/metrics.js';
+import { authenticate } from './middlewares/auth.js';
+import { correlationIdMiddleware } from './middlewares/correlationId.js';
 
 ddTrace.init();
 
 const app = express();
 initConfig();
 
-// Middlewares recomendados
+// Recommended middlewares
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-import { traceIdMiddleware } from './middlewares/traceId.js';
-import { metricsMiddleware } from './middlewares/metrics.js';
 app.use(traceIdMiddleware);
+app.use(correlationIdMiddleware);
 app.use(metricsMiddleware);
 app.use(pinoHttp({ logger }));
 app.use(compression());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
-
-import { authenticate } from './middlewares/auth.js';
-import { correlationIdMiddleware } from './middlewares/correlationId.js';
-import { metricsMiddleware } from './middlewares/metrics.js';
-app.use(correlationIdMiddleware);
-app.use(metricsMiddleware);
 app.use(authenticate);
 app.use('/api', routes);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
