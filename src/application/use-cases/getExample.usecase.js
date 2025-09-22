@@ -1,12 +1,19 @@
-import { ExampleEntity } from '../../domain/entities/example.entity.js';
-
 export class GetExampleUseCase {
-  async execute() {
-    const entity = new ExampleEntity('123', 'Example name');
-    return {
-      id: entity.id,
-      name: entity.name,
-      createdAt: entity.createdAt,
-    };
+  constructor(exampleRepository) {
+    this.exampleRepository = exampleRepository;
+  }
+
+  async execute({ id }) {
+    if (!id) {
+      throw new Error('Example id is required');
+    }
+
+    const entity = await this.exampleRepository.findById(id);
+
+    if (!entity) {
+      throw new Error(`Example with id ${id} not found`);
+    }
+
+    return entity.toDTO();
   }
 }

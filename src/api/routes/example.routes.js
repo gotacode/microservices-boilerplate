@@ -8,14 +8,20 @@ router.use(authenticate());
 
 /**
  * @swagger
- * /api/example:
+ * /api/example/{id}:
  *   get:
  *     summary: Retorna um exemplo
  *     tags: [Example]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
  *         description: Sucesso
  */
-router.get('/', getExampleController);
+router.get('/:id', getExampleController);
 
 export default router;
